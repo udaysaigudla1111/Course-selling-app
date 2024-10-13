@@ -1,5 +1,5 @@
 const {z} = require("zod")
-const {adminModel} = require("../db.js")
+const {adminModel,courseModel} = require("../db.js")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 
@@ -120,5 +120,81 @@ const adminControllerSignin = async (req,res)=>{
   
 
 }
+const adminControllerMe = async (req,res)=>{
 
-module.exports = {adminControllerSignup,adminControllerSignin}
+    const adminId = req.adminId;
+
+    try {
+        const admin = await adminModel.findOne({_id:adminId})
+
+        return res.status(200).json({
+            email:admin.email
+        })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message:"INTERNAL SERVER ERROR"
+        })
+    }
+
+}
+
+const adminControllerCourse = async(req,res)=>{
+
+    const adminId = req.adminId;
+
+    const {title,description,price,imageUrl} = req.body;
+
+    try {
+
+        const course = await courseModel.create({
+            title,
+            description,
+            price,
+            imageUrl,
+            createrId:adminId
+        })
+
+        return res.status(200).json({
+            message:"COURSE CREATED SUCCESSFULLY",
+            course
+        })
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message:"INTERNAL SERVER ERROR"
+        })
+        
+    }
+
+
+}
+
+const adminControllerGetCourses = async(req,res)=>{
+
+    const adminId = req.adminId;
+
+    try 
+    {
+        const Courses = await courseModel.find({createrId:adminId}).populate({
+            path:'createrId',
+            select:'email -_id'
+        }).exec();   
+        
+        return res.status(200).json({
+            Courses
+        })
+    } 
+    catch (error)
+     {
+        console.log(error);
+        return res.status(500).json({
+            message:"INTERNAL SERVER ERROR"
+        })
+    }
+
+}
+
+module.exports = {adminControllerSignup,adminControllerSignin,adminControllerMe,adminControllerCourse,adminControllerGetCourses}

@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import axios from 'axios'
 
-const SignIn = () => {
+const SignIn = ({setIsAuthenticated}) => {
 
   let [email,setEmail] = useState("")
   let [password,setPassword] = useState("")
@@ -15,9 +15,15 @@ const SignIn = () => {
           password
         })
 
+        if(response.data.message)
+        {
+            alert("PLEASE ENTER THE DETAILS PROPERLY")
+            return;
+        }
      
         console.log(response.data.token);
-        
+        localStorage.setItem("token",response.data.token)
+        setIsAuthenticated(true)
         setEmail("")
         setPassword("")
 

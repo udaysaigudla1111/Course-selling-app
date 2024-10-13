@@ -24,6 +24,32 @@ const adminSchema = new Schema({
     timestamps:true
 })
 
-const adminModel = mongoose.model("admin",adminSchema)
+const courseSchema = new Schema({
+    title:{
+        type:String,
+        required:true
+    },
+    description:{
+        type:String,
+        required:true
+    },
+    price:{
+        type:Number,
+        required:true
+    },
+    imageUrl:{
+        type:String,
+    },
+    createrId:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'admin'
+    }
+},{
+    timestamps:true
+})
 
-module.exports = {adminModel}
+
+const adminModel = mongoose.model("admin",adminSchema)
+const courseModel = mongoose.model("course",courseSchema)
+
+module.exports = {adminModel,courseModel}
