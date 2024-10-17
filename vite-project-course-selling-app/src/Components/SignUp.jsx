@@ -9,6 +9,9 @@ const SignUp = () => {
   let [firstName,setFirstName] = useState("")
   let [lastName,setLastName] = useState("")
 
+  console.log("In the signup component");
+  
+
    const submitSignUp = async()=>{
     try
     {
@@ -22,6 +25,9 @@ const SignUp = () => {
       console.log(response.data);
       
       alert(response.data.message)
+
+      console.log("In the signup");
+      
 
     }
     catch(error)
@@ -40,7 +46,7 @@ const SignUp = () => {
   return (
     <>
       {/* <AppBar />  THIS APPBAR COMPONENT IS COMMON FOR BOTH THE SIGNIN AND SIGNUP SO WE PUT ABOVE THE ROUTER */}
-  <div className='h-[90vh] w-full flex flex-col items-center justify-start bg-gray-200'>
+  <div className='h-[90vh] min-h-screen w-full flex flex-col items-center justify-start bg-gradient-to-t from-[#fbc2eb] to-[#a6c1ee]'>
         <h1 className='text-2xl mb-4 mt-24 font-medium'>Welcome back to Coursera. SignUp below</h1>
     <div className='flex flex-col justify-center gap-2 rounded-xl shadow-lg w-[520px] h-[59vh] p-8 bg-white'>
         <div>

@@ -197,4 +197,49 @@ const adminControllerGetCourses = async(req,res)=>{
 
 }
 
-module.exports = {adminControllerSignup,adminControllerSignin,adminControllerMe,adminControllerCourse,adminControllerGetCourses}
+const adminControllerUpdateCourse = async(req,res)=>{
+
+    const adminId = req.adminId;
+
+    const {title,description,price,imageUrl,courseId} = req.body;
+
+    try {
+
+        const course = await courseModel.findOne({_id:courseId})
+
+        if(course.createrId.toString()!==adminId)
+        {
+            console.log(course.createrId);
+            
+            return res.status(400).json({
+                message:"THE COURSE ID DOES NOT BELONGS TO ADMIN"
+            })
+        }
+
+        const updatedCourse = await courseModel.findByIdAndUpdate({_id:courseId},{
+            title,
+            description,
+            price,
+            imageUrl
+        },{
+            new:true,
+            runValidators:true
+        })
+
+        return res.status(200).json({
+            message:"Course Updated successfully",
+            updatedCourse
+        })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message:"INTERNAL SERVER ERROR"
+        })
+        
+    }
+
+
+}
+
+module.exports = {adminControllerSignup,adminControllerSignin,adminControllerMe,adminControllerCourse,adminControllerGetCourses,adminControllerUpdateCourse}

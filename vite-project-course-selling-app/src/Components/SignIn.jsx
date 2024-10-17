@@ -5,7 +5,8 @@ const SignIn = ({setIsAuthenticated}) => {
 
   let [email,setEmail] = useState("")
   let [password,setPassword] = useState("")
-
+  console.log("in the signin component");
+  
   const submitSignIn = async ()=>{
 
       try {
@@ -35,7 +36,7 @@ const SignIn = ({setIsAuthenticated}) => {
   }
 
   return (
-    <div className='h-[90vh] overflow-hidden w-full flex flex-col items-center justify-start bg-gray-200'>
+    <div className='h-[90vh] overflow-hidden w-full flex flex-col items-center justify-start bg-gradient-to-t from-[#fbc2eb] to-[#a6c1ee]'>
         <h1 className='text-2xl mb-4 mt-24 font-medium'>Welcome back to Coursera. SignIn below</h1>
     <div className='flex flex-col justify-center gap-3 rounded-xl shadow-lg w-[520px] h-[39vh] p-8 bg-white'>
         <div>
