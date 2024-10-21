@@ -196,7 +196,7 @@ const userControllerGetPurchasedCourses = async(req,res)=>{
             path:'courseId',
             populate:{
                 path:'createrId',
-                select:'email firstName'
+                select:'email firstName lastName'
             }
         }).exec();
 

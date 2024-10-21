@@ -8,6 +8,7 @@ import AdminCourses from './Components/AdminCourses';
 import UserSignUp from './Components/UserSignUp';
 import UserSignIn from './Components/UserSignIn';
 import Preview from './Components/Preview'
+import PurchasesCourses from './Components/PurchasesCourses';
 const App = () => {
 
   console.log("app component");
@@ -51,8 +52,8 @@ const App = () => {
 
         
        <Route path="/user/signup" element={authStatus==='none'&&authMode==='user'?<UserSignUp/>:authStatus==='user'&&<Navigate to="/preview" />} /> 
-       <Route path='/user/signin' element={authStatus==='none'&&authMode==='user'?<UserSignIn setAuthStatus={setAuthStatus} setAuthMode={setAuthMode}  />:authStatus==='user'?<Navigate to="/preview" />:<></>} /> 
-
+       <Route path='/user/signin' element={authStatus==='none'&&authMode==='user'?<UserSignIn setAuthStatus={setAuthStatus} setAuthMode={setAuthMode}  />:<Navigate to="/preview" />} /> 
+        <Route path="/user/purchased" element={authStatus==='none'&&authMode===''?<Navigate to="/preview"/>:authStatus==='user'&&<PurchasesCourses />}  />
         <Route path='/preview' element={authStatus==='none'||authStatus==='user'?<Preview authStatus={authStatus} setAuthMode={setAuthMode} />:authStatus==='admin'?<Navigate to="/admin/addcourse" />:<></> } />
 
     </Routes>

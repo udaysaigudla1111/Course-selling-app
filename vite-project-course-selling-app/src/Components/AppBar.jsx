@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import { useNavigate } from 'react-router-dom'
+import { UNSAFE_ErrorResponseImpl, useNavigate } from 'react-router-dom'
 import axios from "axios"
 import { useLocation } from 'react-router-dom'
 
@@ -28,8 +28,9 @@ const AppBar = ({authStatus,setAuthStatus,authMode,setAuthMode}) => {
             })
 
             console.log(response.data.email);
-           
-              setEmail(response.data.email)
+           let array = response.data.email.split("@gmail.com")
+           let Name = array[0];
+              setEmail(Name)
           }
           catch(error)
           {
@@ -81,8 +82,8 @@ const AppBar = ({authStatus,setAuthStatus,authMode,setAuthMode}) => {
 
           {
             authStatus==='admin'&&authMode==='admin'&&<>
-             <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75'  >{email}</button>
-          <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75' onClick={()=>{navigate("/admin/courses")}}  >ADMIN courses</button>
+             <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75'  >Hii {email}</button>
+          <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75' onClick={()=>{navigate("/admin/courses")}}  >{email} courses</button>
            <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75' onClick={()=>{localStorage.setItem("admin-token",""); setAuthStatus('none'); setAuthMode('') }} >LogOut</button>
         
             </>
@@ -91,8 +92,8 @@ const AppBar = ({authStatus,setAuthStatus,authMode,setAuthMode}) => {
 
            {
             authStatus==='user'&&<>
-             <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75'  >{email}</button>
-          <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75'  >PURCHASED COURSES</button>
+             <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75'  >Hii {email}</button>
+          <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75' onClick={()=>{navigate("/user/purchased")}} >{email} PURCHASED COURSES</button>
            <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75' onClick={()=>{localStorage.setItem("user-token",""); setAuthMode(''); setAuthStatus('none') }} >LogOut</button>
         
             </>

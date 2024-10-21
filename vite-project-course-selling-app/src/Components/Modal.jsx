@@ -28,7 +28,7 @@ const Modal = ({visible,onClose,courseId,setCourses}) => {
                 courseId:courseId.current
             },{
                 headers:{
-                    token:localStorage.getItem("token")
+                    token:localStorage.getItem("admin-token")
                 }
             })
 
