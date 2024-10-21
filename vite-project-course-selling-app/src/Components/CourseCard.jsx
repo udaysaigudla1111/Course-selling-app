@@ -2,6 +2,9 @@ import React from 'react'
 import courseImage from '../images/online-course.png'
 
 const CourseCard = ({course,setShowModal,courseId}) => {
+  
+  console.log("In the Course Card component");
+  
   return (
     <>
    <div className='bg-white rounded-2xl shadow-lg hover:scale-105 duration-1000 pt-3 pl-3 pr-3 '>

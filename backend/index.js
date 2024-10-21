@@ -1,6 +1,8 @@
 const express = require("express")
 const dotenv = require("dotenv")
 const {adminRouter} = require("./Routes/adminRouter.js")
+const {userRouter} = require("./Routes/userRouter")
+const {courseRouter} = require("./Routes/courseRouter")
 dotenv.config();
 const app = express();
 const cors = require("cors")
@@ -20,6 +22,8 @@ app.use(cors());
 
 
 app.use("/api/v1/admin",adminRouter)
+app.use("/api/v1/user",userRouter)
+app.use("/api/v1/course",courseRouter)
 
 
 

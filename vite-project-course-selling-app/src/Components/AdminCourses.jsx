@@ -5,10 +5,10 @@ import Modal from './Modal';
 
 const AdminCourses = () => {
 
-    console.log("in the admin course component");
+    console.log("in the admin courses component");
     let [courses,setCourses] = useState([])
     let [showModal,setShowModal] = useState(false)
-
+    let [loading,setLoading] = useState(false)
     let courseId = useRef("")
 
     useEffect(()=>{
@@ -16,13 +16,14 @@ const AdminCourses = () => {
       const getCourses = async ()=>{
 
         try {
-
+          setLoading(true)
           const response = await axios.get("http://localhost:3000/api/v1/admin/bulk/course",{
             headers:{
-              token:localStorage.getItem("token")
+              token:localStorage.getItem("admin-token")
             }
           })
 
+          setLoading(false)
           setCourses(response.data.Courses)
 
         } catch (error) {
@@ -44,12 +45,20 @@ const AdminCourses = () => {
                 All Courses Of The Admin
         </div>
         <div className='grid lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-1 gap-3 p-4'>
-        {courses.map((course)=>{
+       {!loading? courses.map((course)=>{
 
             return <CourseCard key={course._id} course={course} courseId={courseId} setShowModal={setShowModal} />
 
-        })}
+        }):
+         <>
+            <div className='flex justify-center items-center h-[60vh] w-[1620px]'>
+                <div className="flex justify-center items-center ">
+                 <div className="animate-spin rounded-full h-60 w-60 border-4 border-t-4 border-gray-200 border-t-blue-500"></div>
+                </div>
+            </div>
+            </>
 
+      }
         </div>
 
     </div>

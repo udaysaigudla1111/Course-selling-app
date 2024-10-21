@@ -1,26 +1,34 @@
 import React,{useState,useEffect} from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from "axios"
+import { useLocation } from 'react-router-dom'
 
-const AppBar = ({isAuthenticated,setIsAuthenticated}) => {
+const AppBar = ({authStatus,setAuthStatus,authMode,setAuthMode}) => {
 
+  
+  
   let [email,setEmail] = useState("")
-  let [loading,setLoading] = useState(false)
+
+  const location = useLocation();
+  
+  console.log(location.pathname);
+  
 
   useEffect(()=>{
     const getAdmin = async ()=>{
-        if(isAuthenticated)
+        if(authStatus!=='none'&&authMode!=='')
         {
-          setLoading(true)
+          console.log(authMode);
+          
           try{
-            const response = await axios.get("http://localhost:3000/api/v1/admin/me",{
+            const response = await axios.get(`http://localhost:3000/api/v1/${authMode}/me`,{
               headers:{
-                token:localStorage.getItem("token")
+                token:localStorage.getItem(`${authMode}-token`)
               }
             })
 
             console.log(response.data.email);
-            setLoading(false)
+           
               setEmail(response.data.email)
           }
           catch(error)
@@ -30,37 +38,68 @@ const AppBar = ({isAuthenticated,setIsAuthenticated}) => {
           }
 
         }else{
-          setEmail("")
+          console.log("in the appbar use effect");
+          
         }
     }
 
     getAdmin();
-  },[isAuthenticated])
+  },[authStatus,authMode])
 
-  const Logout = ()=>{
-      localStorage.setItem("token","")
-      setIsAuthenticated(false)
-  }
+  
+ 
 
   const navigate = useNavigate()
   return (
-    <div className=' bg-violet-500 flex h-[10vh] justify-between items-center p-4'>
+    <div className=' bg-blue-500 flex h-[10vh] justify-between items-center p-4'>
         <div className='text-xl font-medium text-white'>
             Coursera
         </div>
+         <div className="text-2xl font-medium text-white">
+          A GREAT LEARNING PLACE
+        </div>
         <div className='flex justify-center items-center gap-3'>
-           {!email? <> <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75' onClick={()=>{navigate("/admin/signup")}}>SignUp</button>
-            <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75' onClick={()=>{navigate("/admin/signin")}}>SignIn</button> </>  : <>
-            <h1 className='text-white bg-black px-4 py-2 rounded-xl  font-bold mr-2 text-2xl  '>{loading?<svg className="animate-spin h-7 w-7 mr-3  text-white-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>:email}</h1>
-            <button className='bg-red-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75' onClick={Logout} >{loading?<svg className="animate-spin h-7 w-7 mr-3  text-white-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>:'Logout'}</button>
-            <button onClick={()=>{navigate("/admin/courses")}}>All Courses of {email}</button>
-            </> }
+          
+            {(location.pathname==='/preview')&&authStatus==='none'&&<>
+             <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75' onClick={()=>{setAuthMode("admin"); navigate("/admin/signup") }} >ADMIN</button>
+          <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75' onClick={()=>{setAuthMode("user"); navigate("/user/signup")}} >USER</button>
+          </>}
+
+          {
+            authMode==='admin'&&authStatus==='none'&&location.pathname!=='/preview'&&<>
+            <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75' onClick={()=>{navigate("/admin/signup")}}>ADMIN SIGNUP</button>
+          <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75'  onClick={()=>{navigate("/admin/signin")}} >ADMIN SIGNIN</button>
+            </>}
+          
+
+           {
+            authMode==='user'&&authStatus==='none'&&location.pathname!=="/preview"&&<>
+            <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75' onClick={()=>{navigate("/user/signup")}}  >USER SIGNUP</button>
+          <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75' onClick={()=>{navigate("/user/signin")}} >USER SIGNIN</button>
+            </>
+          }
+
+          {
+            authStatus==='admin'&&authMode==='admin'&&<>
+             <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75'  >{email}</button>
+          <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75' onClick={()=>{navigate("/admin/courses")}}  >ADMIN courses</button>
+           <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75' onClick={()=>{localStorage.setItem("admin-token",""); setAuthStatus('none'); setAuthMode('') }} >LogOut</button>
+        
+            </>
+
+          }
+
+           {
+            authStatus==='user'&&<>
+             <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75'  >{email}</button>
+          <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75'  >PURCHASED COURSES</button>
+           <button className='bg-orange-500 px-4 py-2 rounded-xl text-xl font-medium text-white hover:bg-orange-400 active:scale-[0.98] hover:scale-[1.01] active:duration-75' onClick={()=>{localStorage.setItem("user-token",""); setAuthMode(''); setAuthStatus('none') }} >LogOut</button>
+        
+            </>
+
+          }
+            
+
         </div>
         </div>
   )

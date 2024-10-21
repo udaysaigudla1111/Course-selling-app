@@ -3,6 +3,8 @@ import React,{useState} from 'react'
 
 
 const Modal = ({visible,onClose,courseId,setCourses}) => {
+    
+         console.log("In the modal component");
          
     console.log(courseId.current);
     

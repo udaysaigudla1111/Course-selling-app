@@ -24,7 +24,7 @@ const AddCourse = () => {
                 imageUrl
             },{
                 headers:{
-                    token:localStorage.getItem("token")
+                    token:localStorage.getItem("admin-token")
                 }
             })
             console.log(response.data.course);

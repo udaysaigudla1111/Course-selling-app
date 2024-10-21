@@ -1,9 +1,8 @@
 import React,{useState} from 'react'
 import axios from 'axios'
 
-const SignIn = ({setAuthStatus,setAuthMode}) => {
-
-  let [email,setEmail] = useState("")
+const UserSignIn = ({setAuthMode,setAuthStatus}) => {
+   let [email,setEmail] = useState("")
   let [password,setPassword] = useState("")
   console.log("in the signin component");
   
@@ -11,7 +10,7 @@ const SignIn = ({setAuthStatus,setAuthMode}) => {
 
       try {
 
-        const response = await axios.post("http://localhost:3000/api/v1/admin/signin",{
+        const response = await axios.post("http://localhost:3000/api/v1/user/signin",{
           email,
           password
         })
@@ -23,9 +22,9 @@ const SignIn = ({setAuthStatus,setAuthMode}) => {
         }
      
         console.log(response.data.token);
-        localStorage.setItem("admin-token",response.data.token)
-        setAuthStatus('admin')
-        setAuthMode('admin')
+        localStorage.setItem("user-token",response.data.token)
+       setAuthMode('user')
+       setAuthStatus('user')
         setEmail("")
         setPassword("")
 
@@ -56,4 +55,4 @@ const SignIn = ({setAuthStatus,setAuthMode}) => {
   )
 }
 
-export default SignIn
+export default UserSignIn
